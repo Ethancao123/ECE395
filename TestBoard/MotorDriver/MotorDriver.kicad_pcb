@@ -140,7 +140,7 @@
 			(mirror no)
 			(drillshape 0)
 			(scaleselection 1)
-			(outputdirectory "Gerbers/")
+			(outputdirectory "MOTOR_GERBERS/")
 		)
 	)
 	(net 0 "")
@@ -501,7 +501,7 @@
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor handsolder")
 		(property "Reference" "R1"
-			(at 0 -1.65 0)
+			(at 2.232293 -1.731338 0)
 			(layer "F.SilkS")
 			(uuid "5a769d00-3a45-4367-b836-24b146a2be8d")
 			(effects
@@ -714,7 +714,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C5"
-			(at -2.75 0 180)
+			(at -0.00954 -1.819319 180)
 			(layer "F.SilkS")
 			(uuid "e7957612-69fc-4112-bde8-5b5a98b4086b")
 			(effects
@@ -1962,7 +1962,7 @@
 		(descr "Inductor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
 		(tags "inductor")
 		(property "Reference" "L1"
-			(at 0 -1.43 0)
+			(at -2 -1.5 0)
 			(layer "F.SilkS")
 			(uuid "f7ca3cfc-de65-434a-bb9b-954e30ca1293")
 			(effects
@@ -3767,6 +3767,318 @@
 		)
 		(layer "Edge.Cuts")
 		(uuid "b67b4790-a5a7-4e28-bcce-d0d3521ce308")
+	)
+	(gr_text "DRVOFF"
+		(at 126.5 89.75 90)
+		(layer "F.SilkS")
+		(uuid "082642fc-a134-432b-a483-2737b08c27bb")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify left)
+		)
+	)
+	(gr_text "INHB"
+		(at 126.5 95.25 0)
+		(layer "F.SilkS")
+		(uuid "37a3ce0d-dcfa-4ac9-8a34-cb1b7405de21")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify left)
+		)
+	)
+	(gr_text "SCS_N"
+		(at 126.5 77.5 0)
+		(layer "F.SilkS")
+		(uuid "38489b59-9596-4a57-a11d-fccda35966f2")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify left)
+		)
+	)
+	(gr_text "SDO"
+		(at 126.5 80 0)
+		(layer "F.SilkS")
+		(uuid "3dfe3202-e493-46b3-8733-6b9167fd1783")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify left)
+		)
+	)
+	(gr_text "INLB"
+		(at 126.5 98 0)
+		(layer "F.SilkS")
+		(uuid "48f7637c-c283-4781-89af-01b0187c92ba")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify left)
+		)
+	)
+	(gr_text "BATT+"
+		(at 138.25 104 0)
+		(layer "F.SilkS")
+		(uuid "4e337f87-64ec-419b-b77c-7cf04a7ac157")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify right)
+		)
+	)
+	(gr_text "SLP_N"
+		(at 127 76.5 90)
+		(layer "F.SilkS")
+		(uuid "57ed5729-c00e-4adc-9be7-798bceb65281")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify left)
+		)
+	)
+	(gr_text "BUCK"
+		(at 141.5 93 0)
+		(layer "F.SilkS")
+		(uuid "5c03c162-b2cc-4fad-b642-90009f8dd61c")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify right)
+		)
+	)
+	(gr_text "INHC"
+		(at 126.5 100.5 0)
+		(layer "F.SilkS")
+		(uuid "5f518c32-dc49-4af1-979d-48cec47d970f")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify left)
+		)
+	)
+	(gr_text "BATT+"
+		(at 142 101.5 0)
+		(layer "F.SilkS")
+		(uuid "66169f91-5872-479e-96e6-cd6beef1a0dd")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify right)
+		)
+	)
+	(gr_text "INLC"
+		(at 126.5 103 0)
+		(layer "F.SilkS")
+		(uuid "7f94eddf-7b5b-4ae3-b9aa-657b930265b3")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify left)
+		)
+	)
+	(gr_text "BATT-"
+		(at 133.25 104 0)
+		(layer "F.SilkS")
+		(uuid "833362a3-99d5-4612-99a7-8da93f4a7218")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify right)
+		)
+	)
+	(gr_text "OUTA"
+		(at 141 73.75 90)
+		(layer "F.SilkS")
+		(uuid "8a3d2607-fb4a-48bb-8a8b-8f4a9dbea98d")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify right)
+		)
+	)
+	(gr_text "SOB"
+		(at 141.375773 86.771807 90)
+		(layer "F.SilkS")
+		(uuid "8e1a88c6-f51a-4088-8645-f5c5fcf45bc0")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify right)
+		)
+	)
+	(gr_text "SDI"
+		(at 126.5 82.5 0)
+		(layer "F.SilkS")
+		(uuid "9415edb4-568f-48a3-bb93-8788a91d3028")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify left)
+		)
+	)
+	(gr_text "OUTB"
+		(at 141.5 77.5 0)
+		(layer "F.SilkS")
+		(uuid "9514634d-147c-40e3-bd07-892de1a9e633")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify right)
+		)
+	)
+	(gr_text "3V3"
+		(at 141.5 94.5 0)
+		(layer "F.SilkS")
+		(uuid "9e43cad5-4b77-454c-abeb-152a680c00ba")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify right)
+		)
+	)
+	(gr_text "GND"
+		(at 141.25 97.5 90)
+		(layer "F.SilkS")
+		(uuid "a5984c80-f0ce-4020-bef7-4e93c867f60d")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify right)
+		)
+	)
+	(gr_text "SCLK"
+		(at 126.5 84 0)
+		(layer "F.SilkS")
+		(uuid "b40284f8-347d-4e5c-834d-1f003c652807")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify left)
+		)
+	)
+	(gr_text "NC"
+		(at 141.5 82.5 0)
+		(layer "F.SilkS")
+		(uuid "ba95ffa9-711d-4d20-b69e-215f03590901")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify right)
+		)
+	)
+	(gr_text "INLA"
+		(at 126.5 92.75 0)
+		(layer "F.SilkS")
+		(uuid "e103303c-e06c-4769-a543-941d7af482be")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify left)
+		)
+	)
+	(gr_text "SOA"
+		(at 141.365292 83.931417 90)
+		(layer "F.SilkS")
+		(uuid "e3ff8eba-9cd7-412a-9817-eab93eced389")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify right)
+		)
+	)
+	(gr_text "SOC"
+		(at 141.354811 90.020962 90)
+		(layer "F.SilkS")
+		(uuid "ebc36f60-f7d4-4631-bfee-b36bcf6a6c6a")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify right)
+		)
+	)
+	(gr_text "OUTC"
+		(at 141.5 80 0)
+		(layer "F.SilkS")
+		(uuid "eece59a6-e934-4d59-bc06-da4cda0498f1")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify right)
+		)
+	)
+	(gr_text "BATT-"
+		(at 142 104 0)
+		(layer "F.SilkS")
+		(uuid "f2e4330a-f750-4ae9-94f2-e089dd41e348")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify right)
+		)
+	)
+	(gr_text "INHA"
+		(at 126.5 91 0)
+		(layer "F.SilkS")
+		(uuid "fa9183d0-5d16-43dd-9d05-3a18138d901a")
+		(effects
+			(font
+				(size 0.8 0.75)
+				(thickness 0.1)
+			)
+			(justify left)
+		)
 	)
 	(segment
 		(start 136.753034 87.25)
@@ -8892,11 +9204,11 @@
 				(xy 127.453017 87.866586) (xy 127.539947 87.922453) (xy 127.642122 87.952454) (xy 127.678035 87.962999)
 				(xy 127.678036 87.962999) (xy 127.678039 87.963) (xy 127.678041 87.963) (xy 127.821959 87.963) (xy 127.821961 87.963)
 				(xy 127.821962 87.962999) (xy 127.825943 87.962427) (xy 127.865658 87.964792) (xy 127.874171 87.967073)
-				(xy 127.929276 87.981838) (xy 128.528359 87.981838) (xy 128.58655 88.000745) (xy 128.598363 88.010834)
-				(xy 130.070504 89.482975) (xy 130.098281 89.537492) (xy 130.0995 89.552979) (xy 130.0995 91.781678)
-				(xy 130.080593 91.839869) (xy 130.031093 91.875833) (xy 129.969907 91.875833) (xy 129.930496 91.851682)
-				(xy 127.329496 89.250682) (xy 127.301719 89.196165) (xy 127.3005 89.180678) (xy 127.3005 87.949874)
-				(xy 127.319407 87.891683) (xy 127.368907 87.855719) (xy 127.430093 87.855719)
+				(xy 127.929276 87.981838) (xy 128.0084 87.981838) (xy 128.528359 87.981838) (xy 128.58655 88.000745)
+				(xy 128.598363 88.010834) (xy 130.070504 89.482975) (xy 130.098281 89.537492) (xy 130.0995 89.552979)
+				(xy 130.0995 91.781678) (xy 130.080593 91.839869) (xy 130.031093 91.875833) (xy 129.969907 91.875833)
+				(xy 129.930496 91.851682) (xy 127.329496 89.250682) (xy 127.301719 89.196165) (xy 127.3005 89.180678)
+				(xy 127.3005 87.949874) (xy 127.319407 87.891683) (xy 127.368907 87.855719) (xy 127.430093 87.855719)
 			)
 		)
 	)
