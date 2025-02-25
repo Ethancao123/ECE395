@@ -4,6 +4,6 @@
 ../Core/Src/nrf.c:70:9:nrf_reset	1
 ../Core/Src/nrf.c:96:9:nrf_status	1
 ../Core/Src/nrf.c:105:9:nrf_tx	2
-../Core/Src/nrf.c:129:9:nrf_rx	1
-../Core/Src/nrf.c:140:16:read_register	1
-../Core/Src/nrf.c:153:16:write_register	1
+../Core/Src/nrf.c:129:9:nrf_rx	3
+../Core/Src/nrf.c:146:16:read_register	1
+../Core/Src/nrf.c:159:16:write_register	1

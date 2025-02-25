@@ -97,6 +97,7 @@ int main(void)
   nrf_init(hspi1, 0);
 #endif
   uint8_t status;
+  uint8_t payload;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -105,20 +106,22 @@ int main(void)
   {
     /* USER CODE END WHILE */
 #ifdef TX
-	  uint8_t payload = 0b1011;
+	  if(HAL_GPIO_ReadPin(BTN_GPIO_Port, BTN_Pin)) {
+		  payload = 0b1011;
+		  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 1);
+	  } else {
+		  payload = 0b1101;
+		  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 0);
+	  }
+
 	  status = nrf_tx(&payload);
-	  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 1);
-	  HAL_Delay(500);
-	  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 0);
-	  HAL_Delay(500);
 #else
-	  uint8_t payload;
+
 	  status = nrf_rx(&payload);
 	  if(payload == 0b1011)
 		  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 1);
-	  HAL_Delay(500);
-	  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 0);
-	  HAL_Delay(500);
+	  else
+		  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 0);
 #endif
     /* USER CODE BEGIN 3 */
   }
