@@ -76,7 +76,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+//#define TX
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -92,6 +92,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
 #ifdef TX
   nrf_init(hspi1, 1);
+#else
+  nrf_init(hspi1, 0);
 #endif
   uint8_t status;
   /* USER CODE END 2 */
@@ -105,6 +107,14 @@ int main(void)
 	  uint8_t payload = 0b1011;
 	  status = nrf_tx(&payload);
 	  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 1);
+	  HAL_Delay(500);
+	  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 0);
+	  HAL_Delay(500);
+#else
+	  uint8_t payload;
+	  status = nrf_rx(&payload);
+	  if(payload == 0b1011)
+		  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 1);
 	  HAL_Delay(500);
 	  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 0);
 	  HAL_Delay(500);
