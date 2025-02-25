@@ -60,8 +60,8 @@ all: main-build
 main-build: RF_Test2.elf secondary-outputs
 
 # Tool invocations
-RF_Test2.elf RF_Test2.map: $(OBJS) $(USER_OBJS) /Users/ethancao/STM32CubeIDE/workspace_1.17.0/RF_Test2/STM32L031K6TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "RF_Test2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"/Users/ethancao/STM32CubeIDE/workspace_1.17.0/RF_Test2/STM32L031K6TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="RF_Test2.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+RF_Test2.elf RF_Test2.map: $(OBJS) $(USER_OBJS) /Users/ethancao/Documents/GitHub/ECE395/STM32/RF_Test2/STM32L031K6TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "RF_Test2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"/Users/ethancao/Documents/GitHub/ECE395/STM32/RF_Test2/STM32L031K6TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="RF_Test2.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

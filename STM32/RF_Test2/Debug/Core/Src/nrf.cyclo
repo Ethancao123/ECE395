@@ -1,9 +1,9 @@
 ../Core/Src/nrf.c:14:6:setCS	1
 ../Core/Src/nrf.c:18:6:setCE	1
 ../Core/Src/nrf.c:23:6:nrf_init	2
-../Core/Src/nrf.c:68:9:nrf_reset	1
-../Core/Src/nrf.c:75:9:nrf_status	1
-../Core/Src/nrf.c:84:9:nrf_tx	2
-../Core/Src/nrf.c:106:9:nrf_rx	1
-../Core/Src/nrf.c:117:16:read_register	1
-../Core/Src/nrf.c:130:16:write_register	1
+../Core/Src/nrf.c:70:9:nrf_reset	1
+../Core/Src/nrf.c:96:9:nrf_status	1
+../Core/Src/nrf.c:105:9:nrf_tx	2
+../Core/Src/nrf.c:129:9:nrf_rx	1
+../Core/Src/nrf.c:140:16:read_register	1
+../Core/Src/nrf.c:153:16:write_register	1

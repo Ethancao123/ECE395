@@ -29,10 +29,12 @@ void nrf_init(SPI_HandleTypeDef bus_, bool isTX_) {
 
 	//set ptx, prx mode
 	if(isTX){
+		write_register(NRF24L01P_REG_TX_ADDR, WIRELESS_ADDR);
 		uint8_t new_config = read_register(NRF24L01P_REG_CONFIG);
 		new_config &= 0xFE;
 		write_register(NRF24L01P_REG_CONFIG, new_config);
 	} else {
+		write_register(NRF24L01P_REG_RX_ADDR_P0, WIRELESS_ADDR);
 		uint8_t new_config = read_register(NRF24L01P_REG_CONFIG);
 		new_config |= 1 << 0;
 		write_register(NRF24L01P_REG_CONFIG, new_config);
@@ -46,10 +48,10 @@ void nrf_init(SPI_HandleTypeDef bus_, bool isTX_) {
 	//set RX pipe width
 	write_register(NRF24L01P_REG_RX_PW_P0, PAYLOAD_LEN);
 	//set RF channel
-	write_register(NRF24L01P_REG_RF_CH, 2415);
+	write_register(NRF24L01P_REG_RF_CH, 15);
 	//set data rate
-	uint8_t new_rf_setup = read_register(NRF24L01P_REG_RF_SETUP) & 0xD7;
-	write_register(NRF24L01P_REG_RF_SETUP, new_rf_setup);
+//	uint8_t new_rf_setup = read_register(NRF24L01P_REG_RF_SETUP) & 0xD7;
+//	write_register(NRF24L01P_REG_RF_SETUP, new_rf_setup);
 	//set tx power
 //	new_rf_setup = read_register(NRF24L01P_REG_RF_SETUP) & 0xF9;
 //	new_rf_setup |= (0x3 << 1);
@@ -68,7 +70,26 @@ void nrf_init(SPI_HandleTypeDef bus_, bool isTX_) {
 uint8_t nrf_reset() {
 	setCS(1);
 	setCE(0);
-
+	// Reset registers
+	// Reset registers
+	write_register(NRF24L01P_REG_CONFIG, 0x08);
+	write_register(NRF24L01P_REG_EN_AA, 0x3F);
+	write_register(NRF24L01P_REG_EN_RXADDR, 0x03);
+	write_register(NRF24L01P_REG_SETUP_AW, 0x03);
+	write_register(NRF24L01P_REG_SETUP_RETR, 0x03);
+	write_register(NRF24L01P_REG_RF_CH, 0x02);
+    write_register(NRF24L01P_REG_RF_SETUP, 0x07);
+    write_register(NRF24L01P_REG_STATUS, 0x7E);
+    write_register(NRF24L01P_REG_RX_PW_P0, 0x00);
+    write_register(NRF24L01P_REG_RX_PW_P0, 0x00);
+    write_register(NRF24L01P_REG_RX_PW_P1, 0x00);
+    write_register(NRF24L01P_REG_RX_PW_P2, 0x00);
+    write_register(NRF24L01P_REG_RX_PW_P3, 0x00);
+    write_register(NRF24L01P_REG_RX_PW_P4, 0x00);
+    write_register(NRF24L01P_REG_RX_PW_P5, 0x00);
+    write_register(NRF24L01P_REG_FIFO_STATUS, 0x11);
+    write_register(NRF24L01P_REG_DYNPD, 0x00);
+    write_register(NRF24L01P_REG_FEATURE, 0x00);
 	return nrf_status();
 }
 
@@ -88,6 +109,8 @@ uint8_t nrf_tx(uint8_t* payload){
 	setCS(0);
 	HAL_SPI_TransmitReceive(&bus, &command, &status, 1, 2000);
 	setCS(1);
+	//clear max_rt
+	write_register(NRF24L01P_REG_STATUS, 0b00010000);
 	//place in TX FIFO
 	if(isTX){
 		//W_TX_PAYLOAD command

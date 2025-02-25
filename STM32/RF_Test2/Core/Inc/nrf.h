@@ -9,6 +9,7 @@
 #define SRC_NRF_H_
 
 #define PAYLOAD_LEN 8
+#define WIRELESS_ADDR 0x000000000B
 
 /* nRF24L01+ Commands */
 #define NRF24L01P_CMD_R_REGISTER                  0b00000000
