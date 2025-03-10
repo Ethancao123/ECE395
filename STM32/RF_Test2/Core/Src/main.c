@@ -76,7 +76,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-#define TX
+//#define TX
   /* USER CODE END Init */
 
   /* Configure the system clock */
