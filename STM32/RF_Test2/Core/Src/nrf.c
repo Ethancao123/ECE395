@@ -134,11 +134,8 @@ uint8_t nrf_rx(uint8_t* payload){
 	uint8_t command = NRF24L01P_CMD_R_RX_PAYLOAD;
 	uint8_t status;
 	setCS(0);
-	do {
-		HAL_SPI_TransmitReceive(&bus, &command, &status, 1, 2000);
-		HAL_SPI_Receive(&bus, payload, PAYLOAD_LEN, 2000);
-	} while(!(read_register(NRF24L01P_REG_FIFO_STATUS) & 0b00000001));
-	setCS(1);
+	HAL_SPI_TransmitReceive(&bus, &command, &status, 1, 2000);
+	HAL_SPI_Receive(&bus, payload, PAYLOAD_LEN, 2000);
 	return status;
 	//TODO: This while loops forever
 
