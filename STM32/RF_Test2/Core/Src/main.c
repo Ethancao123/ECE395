@@ -98,6 +98,7 @@ int main(void)
 #endif
   uint8_t status;
   uint8_t payload;
+  uint8_t ack_payload;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -113,15 +114,28 @@ int main(void)
 		  payload = 0b11011101;
 		  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 0);
 	  }
-
 	  status = nrf_tx(&payload);
-#else
+	  status = nrf_rx(&ack_payload);
+	  if(ack_payload == 0b10111011)
+	  	  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 1);
+	  else
+	  	  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 0);
 
+#else
 	  status = nrf_rx(&payload);
 	  if(payload == 0b10111011)
 		  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 1);
 	  else
 		  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 0);
+
+	  if(HAL_GPIO_ReadPin(BTN_GPIO_Port, BTN_Pin)) {
+	  	 ack_payload = 0b10111011;
+	     HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 1);
+	  } else {
+	  	 ack_payload = 0b11011101;
+	  	 HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, 0);
+	  }
+	  status = nrf_tx(&ack_payload);
 #endif
     /* USER CODE BEGIN 3 */
   }
@@ -226,7 +240,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(CSN_GPIO_Port, CSN_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(CE_GPIO_Port, CE_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, CE_Pin|LED2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
@@ -251,6 +265,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(BTN_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : LED2_Pin */
+  GPIO_InitStruct.Pin = LED2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

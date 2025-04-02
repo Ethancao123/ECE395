@@ -76,20 +76,19 @@ uint8_t nrf_reset() {
 	write_register(NRF24L01P_REG_EN_AA, 0x3F);
 	write_register(NRF24L01P_REG_EN_RXADDR, 0x03);
 	write_register(NRF24L01P_REG_SETUP_AW, 0x03);
-	write_register(NRF24L01P_REG_SETUP_RETR, 0x03);
+	write_register(NRF24L01P_REG_SETUP_RETR, 0x2F);
 	write_register(NRF24L01P_REG_RF_CH, 0x02);
     write_register(NRF24L01P_REG_RF_SETUP, 0x07);
     write_register(NRF24L01P_REG_STATUS, 0x7E);
-    write_register(NRF24L01P_REG_RX_PW_P0, 0x00);
-    write_register(NRF24L01P_REG_RX_PW_P0, 0x00);
+    write_register(NRF24L01P_REG_RX_PW_P0, 0x20);
     write_register(NRF24L01P_REG_RX_PW_P1, 0x00);
     write_register(NRF24L01P_REG_RX_PW_P2, 0x00);
     write_register(NRF24L01P_REG_RX_PW_P3, 0x00);
     write_register(NRF24L01P_REG_RX_PW_P4, 0x00);
     write_register(NRF24L01P_REG_RX_PW_P5, 0x00);
     write_register(NRF24L01P_REG_FIFO_STATUS, 0x11);
-    write_register(NRF24L01P_REG_DYNPD, 0x00);
-    write_register(NRF24L01P_REG_FEATURE, 0x00);
+    write_register(NRF24L01P_REG_DYNPD, 0x01);
+    write_register(NRF24L01P_REG_FEATURE, 0x06);
 	return nrf_status();
 }
 
@@ -103,16 +102,16 @@ uint8_t nrf_status() {
 }
 
 uint8_t nrf_tx(uint8_t* payload){
-	//clear TX FIFO
-	uint8_t command = NRF24L01P_CMD_FLUSH_TX;
+	uint8_t command;
 	uint8_t status;
+	//clear TX FIFO
+	command = NRF24L01P_CMD_FLUSH_TX;
 	setCS(0);
 	HAL_SPI_TransmitReceive(&bus, &command, &status, 1, 2000);
 	setCS(1);
-	//clear max_rt
 	write_register(NRF24L01P_REG_STATUS, 0b00010000);
-	//place in TX FIFO
 	if(isTX){
+		//clear max_rt
 		//W_TX_PAYLOAD command
 		command = NRF24L01P_CMD_W_TX_PAYLOAD;
 	} else {
@@ -132,17 +131,10 @@ uint8_t nrf_rx(uint8_t* payload){
 	if((status & 0b00001110) == 0b00001110)
 		return status;
 	uint8_t command = NRF24L01P_CMD_R_RX_PAYLOAD;
-//	uint8_t status;
 	setCS(0);
 	HAL_SPI_TransmitReceive(&bus, &command, &status, 1, 2000);
 	HAL_SPI_Receive(&bus, payload, PAYLOAD_LEN, 2000);
 	setCS(1);
-//	if((status & 0b00001110) == 0b00001110){
-//
-//		write_register(NRF24L01P_REG_STATUS, 0b01000000);
-//	} else {
-//		HAL_SPI_Receive(&bus, 0, PAYLOAD_LEN, 2000);
-//	}
 	return status;
 
 }
