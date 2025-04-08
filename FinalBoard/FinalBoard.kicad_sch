@@ -10554,7 +10554,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "470"
 			(at 52.07 74.9299 0)
 			(effects
 				(font
@@ -11467,7 +11467,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "47n"
+		(property "Value" "47nF"
 			(at 176.53 63.4999 0)
 			(effects
 				(font
@@ -11536,7 +11536,7 @@
 				)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "3.9k"
 			(at 240.03 44.45 90)
 			(effects
 				(font
@@ -12555,7 +12555,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100n"
+		(property "Value" "100nF"
 			(at 166.37 76.1999 0)
 			(effects
 				(font
@@ -12888,7 +12888,7 @@
 				)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "10k"
 			(at 254 54.61 90)
 			(effects
 				(font
@@ -13794,7 +13794,7 @@
 				)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "3.9k"
 			(at 240.03 54.61 90)
 			(effects
 				(font
@@ -13863,7 +13863,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "470"
 			(at 64.77 74.9299 0)
 			(effects
 				(font
@@ -14131,7 +14131,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "470"
 			(at 39.37 74.9299 0)
 			(effects
 				(font
@@ -14332,7 +14332,7 @@
 				)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "10k"
 			(at 254 64.77 90)
 			(effects
 				(font
@@ -14540,7 +14540,7 @@
 				)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "10k"
 			(at 254 44.45 90)
 			(effects
 				(font
@@ -14878,7 +14878,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "3.9k"
 			(at 149.86 113.0299 0)
 			(effects
 				(font
@@ -15086,7 +15086,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "470"
 			(at 22.86 74.9299 0)
 			(effects
 				(font
@@ -15423,7 +15423,7 @@
 				)
 			)
 		)
-		(property "Value" "R"
+		(property "Value" "3.9k"
 			(at 240.03 64.77 90)
 			(effects
 				(font
