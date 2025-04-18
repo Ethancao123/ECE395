@@ -1,4 +1,5 @@
-#include "Sensor.h"
+#include "Sensor.hpp"
+
 #include "../foc_utils.h"
 #include "../time_utils.h"
 

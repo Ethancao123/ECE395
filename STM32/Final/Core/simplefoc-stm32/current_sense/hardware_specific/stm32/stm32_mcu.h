@@ -4,6 +4,15 @@
 #include "../../hardware_api.h"
 #include "../../../common/foc_utils.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include "stm32g4xx_hal.h"
+
+#ifdef __cplusplus
+}
+#endif
+
 #if defined(_STM32_DEF_) 
 
 // generic implementation of the hardware specific structure

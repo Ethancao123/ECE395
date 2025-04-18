@@ -1,8 +1,9 @@
 #ifndef MAGNETICSENSORI2C_LIB_H
 #define MAGNETICSENSORI2C_LIB_H
 
-#include "Arduino.h"
-#include <Wire.h>
+#include "stm32g4xx_hal.h"
+//TODO: SPI include
+#define byte uint8_t
 #include "../common/base_classes/Sensor.h"
 #include "../common/foc_utils.h"
 #include "../common/time_utils.h"
@@ -49,7 +50,7 @@ class MagneticSensorI2C: public Sensor{
     float getSensorAngle() override;
 
     /** experimental function to check and fix SDA locked LOW issues */
-    int checkBus(byte sda_pin , byte scl_pin );
+    int checkBus(byte sda_pin , byte scl_pin, byte sda_port, byte scl_port);
 
     /** current error code from Wire endTransmission() call **/
     uint8_t currWireError = 0;

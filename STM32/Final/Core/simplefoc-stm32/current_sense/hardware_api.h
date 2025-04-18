@@ -3,7 +3,7 @@
 
 #include "../common/foc_utils.h"
 #include "../common/time_utils.h"
-
+#define _STM32_DEF_
 // flag returned if current sense init fails
 #define SIMPLEFOC_CURRENT_SENSE_INIT_FAILED ((void*)-1)
 

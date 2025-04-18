@@ -1,9 +1,13 @@
 #ifndef BLDCMotor_h
 #define BLDCMotor_h
 
-#include "Arduino.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "stm32g4xx_hal.h"
 #include "common/base_classes/FOCMotor.h"
-#include "common/base_classes/Sensor.h"
+#include <common/base_classes/Sensor.hpp>
 #include "common/base_classes/FOCDriver.h"
 #include "common/base_classes/BLDCDriver.h"
 #include "common/foc_utils.h"

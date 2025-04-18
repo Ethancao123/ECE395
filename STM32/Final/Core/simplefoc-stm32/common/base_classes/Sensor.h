@@ -1,6 +1,5 @@
 #ifndef SENSOR_H
 #define SENSOR_H
-
 #include <inttypes.h>
 
 /**
@@ -124,8 +123,8 @@ class Sensor{
          * to current values, ensuring there is no discontinuity ("jump from zero") during the first calls
          * to sensor.getAngle() and sensor.getVelocity()
          */
-        virtual void init();
-
+//        virtual void init();
+//TODO:Think about this one
         // velocity calculation variables
         float velocity=0.0f;
         float angle_prev=0.0f; // result of last call to getSensorAngle(), used for full rotations and velocity

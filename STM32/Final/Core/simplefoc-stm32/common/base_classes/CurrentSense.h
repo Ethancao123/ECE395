@@ -4,7 +4,6 @@
 #include "FOCDriver.h"
 #include "../foc_utils.h"
 #include "../time_utils.h"
-#include "StepperDriver.h"
 #include "BLDCDriver.h"
 
 /**
@@ -131,10 +130,6 @@ class CurrentSense{
      * Function used to align the current sense with the BLDC motor driver
     */
     int alignBLDCDriver(float align_voltage, BLDCDriver* driver, bool modulation_centered);
-    /**
-     * Function used to align the current sense with the Stepper motor driver
-    */
-    int alignStepperDriver(float align_voltage, StepperDriver* driver, bool modulation_centered);
     /**
      * Function used to read the average current values over N samples
     */

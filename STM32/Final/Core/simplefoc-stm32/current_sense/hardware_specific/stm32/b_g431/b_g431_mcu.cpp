@@ -3,7 +3,11 @@
 #if defined(ARDUINO_B_G431B_ESC1) 
 
 #include "b_g431_hal.h"
-#include "Arduino.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "stm32g4xx_hal.h"
 #include "../stm32_mcu.h"
 #include "../../../../drivers/hardware_specific/stm32/stm32_mcu.h"
 #include "communication/SimpleFOCDebug.h"

@@ -1,8 +1,10 @@
 #ifndef FOCMOTOR_H
 #define FOCMOTOR_H
 
-#include "Arduino.h"
-#include "Sensor.h"
+
+#include "stm32g4xx_hal.h"
+
+#include <common/base_classes/Sensor.h>
 #include "CurrentSense.h"
 
 #include "../time_utils.h"
@@ -211,12 +213,16 @@ class FOCMotor
     bool pp_check_result = false; //!< the result of the PP check, if run during loopFOC
 
     /**
-     * Function providing BLDCMotor class with the 
+     * Function providing BLDCMotor class with the
      * Serial interface and enabling monitoring mode
-     * 
+     *
      * @param serial Monitoring Serial class reference
      */
-    void useMonitoring(Print &serial);
+    class STM32Print {
+    public:
+        void print(const char* msg);
+    };
+    void useMonitoring(STM32Print &serial);
 
     /**
      * Utility function intended to be used with serial plotter to monitor motor variables
@@ -244,7 +250,7 @@ class FOCMotor
     CurrentSense* current_sense; 
 
     // monitoring functions
-    Print* monitor_port; //!< Serial terminal variable if provided
+    STM32Print* monitor_port; //!< Serial terminal variable if provided
   private:
     // monitor counting variable
     unsigned int monitor_cnt = 0 ; //!< counting variable

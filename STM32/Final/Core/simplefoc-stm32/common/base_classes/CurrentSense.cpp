@@ -1,6 +1,5 @@
 #include "CurrentSense.h"
-#include "../../communication/SimpleFOCDebug.h"
-
+#include <math.h>
 
 // get current magnitude 
 //   - absolute  - if no electrical_angle provided 
@@ -140,11 +139,7 @@ int CurrentSense::driverAlign(float voltage, bool modulation_centered){
 
     if (!initialized) return 0;
 
-    // check if stepper or BLDC 
-    if(driver_type == DriverType::Stepper)
-        return alignStepperDriver(voltage, (StepperDriver*)driver, modulation_centered);
-    else
-        return alignBLDCDriver(voltage, (BLDCDriver*)driver, modulation_centered);
+    return alignBLDCDriver(voltage, (BLDCDriver*)driver, modulation_centered);
 }
 
 
@@ -195,7 +190,7 @@ int CurrentSense::alignBLDCDriver(float voltage, BLDCDriver* bldc_driver, bool m
     // either the current sense is not connected or the current is 
     // too low for calibration purposes (one should raise the motor.voltage_sensor_align)
     if((fabs(c_a.a) < 0.1f) && (fabs(c_a.b) < 0.1f) && (fabs(c_a.c) < 0.1f)){
-            SIMPLEFOC_DEBUG("CS: Err too low current, rise voltage!");
+//            SIMPLEFOC_DEBUG("CS: Err too low current, rise voltage!");
             return 0; // measurement current too low
     }
 
@@ -238,7 +233,7 @@ int CurrentSense::alignBLDCDriver(float voltage, BLDCDriver* bldc_driver, bool m
     if(max_c_ratio >=1.5f){
         switch (max_i){
             case 1: // phase B is the max current
-                SIMPLEFOC_DEBUG("CS: Switch A-B");
+//                SIMPLEFOC_DEBUG("CS: Switch A-B");
                 // switch phase A and B
                 _swap(pinA, pinB);
                 _swap(offset_ia, offset_ib);
@@ -247,7 +242,7 @@ int CurrentSense::alignBLDCDriver(float voltage, BLDCDriver* bldc_driver, bool m
                 phases_switched = true; // signal that pins have been switched
                 break;
             case 2: // phase C is the max current
-                SIMPLEFOC_DEBUG("CS: Switch A-C");
+//                SIMPLEFOC_DEBUG("CS: Switch A-C");
                 // switch phase A and C
                 _swap(pinA, pinC);
                 _swap(offset_ia, offset_ic);
@@ -258,25 +253,25 @@ int CurrentSense::alignBLDCDriver(float voltage, BLDCDriver* bldc_driver, bool m
         }
         // check if the current is negative and invert the gain if so
         if( _sign(c_a.a) < 0 ){
-            SIMPLEFOC_DEBUG("CS: Inv A");
+//            SIMPLEFOC_DEBUG("CS: Inv A");
             gain_a *= -1;
             phases_inverted = true; // signal that pins have been inverted
         }
     }else if(_isset(pinA) && _isset(pinB) && _isset(pinC)){
         // if all three currents are measured and none of them is significantly higher
         // we have a problem with the current sense
-        SIMPLEFOC_DEBUG("CS: Err A - all currents same magnitude!");
+//        SIMPLEFOC_DEBUG("CS: Err A - all currents same magnitude!");
         return 0;
     }else{ //phase A is not measured so put the _NC to the phase A
         if(_isset(pinA) && !_isset(pinB)){
-            SIMPLEFOC_DEBUG("CS: Switch A-(B)NC");
+//            SIMPLEFOC_DEBUG("CS: Switch A-(B)NC");
             _swap(pinA, pinB);
             _swap(offset_ia, offset_ib);
             _swap(gain_a, gain_b);
             _swap(c_a.b, c_a.b);
             phases_switched = true; // signal that pins have been switched
         }else if(_isset(pinA) && !_isset(pinC)){
-            SIMPLEFOC_DEBUG("CS: Switch A-(C)NC");
+//            SIMPLEFOC_DEBUG("CS: Switch A-(C)NC");
             _swap(pinA, pinC);
             _swap(offset_ia, offset_ic);
             _swap(gain_a, gain_c);
@@ -325,7 +320,7 @@ int CurrentSense::alignBLDCDriver(float voltage, BLDCDriver* bldc_driver, bool m
         switch (max_i){
             case 0: // phase A is the max current
                 // this is an error as phase A is already aligned
-                SIMPLEFOC_DEBUG("CS: Err align B");
+//                SIMPLEFOC_DEBUG("CS: Err align B");
                 return 0;
             case 2: // phase C is the max current
                 SIMPLEFOC_DEBUG("CS: Switch B-C");
@@ -338,18 +333,18 @@ int CurrentSense::alignBLDCDriver(float voltage, BLDCDriver* bldc_driver, bool m
         }
         // check if the current is negative and invert the gain if so
         if( _sign(c_b.b) < 0 ){
-            SIMPLEFOC_DEBUG("CS: Inv B");
+//            SIMPLEFOC_DEBUG("CS: Inv B");
             gain_b *= -1;
             phases_inverted = true; // signal that pins have been inverted
         }
     }else if(_isset(pinB) && _isset(pinC)){
         // if all three currents are measured and none of them is significantly higher
         // we have a problem with the current sense
-        SIMPLEFOC_DEBUG("CS: Err B - all currents same magnitude!");
+//        SIMPLEFOC_DEBUG("CS: Err B - all currents same magnitude!");
         return 0;
     }else{ //phase B is not measured so put the _NC to the phase B
         if(_isset(pinB) && !_isset(pinC)){
-            SIMPLEFOC_DEBUG("CS: Switch B-(C)NC");
+//            SIMPLEFOC_DEBUG("CS: Switch B-(C)NC");
             _swap(pinB, pinC);
             _swap(offset_ib, offset_ic);
             _swap(gain_b, gain_c);
@@ -366,7 +361,7 @@ int CurrentSense::alignBLDCDriver(float voltage, BLDCDriver* bldc_driver, bool m
     // we have to check if the current is negative and invert the gain if so
     if(_isset(pinC)){
         if( _sign(c_b.c) > 0 ){ // the expected current is -I/2 (if the phase A and B are aligned and C has correct polarity)
-            SIMPLEFOC_DEBUG("CS: Inv C");
+//            SIMPLEFOC_DEBUG("CS: Inv C");
             gain_c *= -1;
             phases_inverted = true; // signal that pins have been inverted
         }
@@ -391,85 +386,85 @@ int CurrentSense::alignBLDCDriver(float voltage, BLDCDriver* bldc_driver, bool m
 // 2 - success but pins reconfigured
 // 3 - success but gains inverted
 // 4 - success but pins reconfigured and gains inverted
-int CurrentSense::alignStepperDriver(float voltage, StepperDriver* stepper_driver, bool modulation_centered){
-    
-    _UNUSED(modulation_centered);
-
-    bool phases_switched = 0;
-    bool phases_inverted = 0;
-
-    if(!_isset(pinA) || !_isset(pinB)){
-        SIMPLEFOC_DEBUG("CS: Pins A & B not specified!");
-        return 0;
-    }
-
-    // set phase A active and phases B down
-    // ramp 300ms
-    for(int i=0; i < 100; i++){
-        stepper_driver->setPwm(voltage/100.0*((float)i), 0);
-        _delay(3);
-    }
-    _delay(500);
-    PhaseCurrent_s c = readAverageCurrents();
-    // disable the phases
-    stepper_driver->setPwm(0, 0);        
-    if (fabs(c.a) < 0.1f && fabs(c.b) < 0.1f ){
-        SIMPLEFOC_DEBUG("CS: Err too low current!");
-        return 0; // measurement current too low
-    }
-    // align phase A
-    // 1) only one phase can be measured so we first measure which ADC pin corresponds 
-    // to the phase A by comparing the magnitude
-    if (fabs(c.a) < fabs(c.b)){
-        SIMPLEFOC_DEBUG("CS: Switch A-B");
-        // switch phase A and B
-        _swap(pinA, pinB);
-        _swap(offset_ia, offset_ib);
-        _swap(gain_a, gain_b);
-        phases_switched = true; // signal that pins have been switched
-    }
-    // 2) check if measured current a is positive and invert if not
-    if (c.a < 0){
-        SIMPLEFOC_DEBUG("CS: Inv A");
-        gain_a *= -1;
-        phases_inverted = true; // signal that pins have been inverted
-    }
-
-    // at this point the driver's phase A is aligned with the ADC pinA
-    // and the pin B should be the phase B
-
-    // set phase B active and phases A down
-    // ramp 300ms
-    for(int i=0; i < 100; i++){
-        stepper_driver->setPwm(0, voltage/100.0*((float)i));
-        _delay(3);
-    }
-    _delay(500);
-    c = readAverageCurrents();
-    stepper_driver->setPwm(0, 0);
-
-    // phase B should be aligned
-    // 1) we just need to verify that it has been measured
-    if (fabs(c.b) < 0.1f ){
-        SIMPLEFOC_DEBUG("CS: Err too low current on B!");
-        return 0; // measurement current too low
-    }
-    // 2) check if measured current a is positive and invert if not
-    if (c.b < 0){
-        SIMPLEFOC_DEBUG("CS: Inv B");
-        gain_b *= -1;
-        phases_inverted = true; // signal that pins have been inverted
-    }
-
-    // construct the return flag
-    // if success and nothing changed return 1 
-    // if the phases have been switched return 2
-    // if the gains have been inverted return 3
-    // if both return 4
-    uint8_t exit_flag = 1;
-    if(phases_switched) exit_flag += 1;
-    if(phases_inverted) exit_flag += 2;
-    return exit_flag;
-}
-
+//int CurrentSense::alignStepperDriver(float voltage, StepperDriver* stepper_driver, bool modulation_centered){
+//
+//    _UNUSED(modulation_centered);
+//
+//    bool phases_switched = 0;
+//    bool phases_inverted = 0;
+//
+//    if(!_isset(pinA) || !_isset(pinB)){
+//        SIMPLEFOC_DEBUG("CS: Pins A & B not specified!");
+//        return 0;
+//    }
+//
+//    // set phase A active and phases B down
+//    // ramp 300ms
+//    for(int i=0; i < 100; i++){
+//        stepper_driver->setPwm(voltage/100.0*((float)i), 0);
+//        _delay(3);
+//    }
+//    _delay(500);
+//    PhaseCurrent_s c = readAverageCurrents();
+//    // disable the phases
+//    stepper_driver->setPwm(0, 0);
+//    if (fabs(c.a) < 0.1f && fabs(c.b) < 0.1f ){
+//        SIMPLEFOC_DEBUG("CS: Err too low current!");
+//        return 0; // measurement current too low
+//    }
+//    // align phase A
+//    // 1) only one phase can be measured so we first measure which ADC pin corresponds
+//    // to the phase A by comparing the magnitude
+//    if (fabs(c.a) < fabs(c.b)){
+//        SIMPLEFOC_DEBUG("CS: Switch A-B");
+//        // switch phase A and B
+//        _swap(pinA, pinB);
+//        _swap(offset_ia, offset_ib);
+//        _swap(gain_a, gain_b);
+//        phases_switched = true; // signal that pins have been switched
+//    }
+//    // 2) check if measured current a is positive and invert if not
+//    if (c.a < 0){
+//        SIMPLEFOC_DEBUG("CS: Inv A");
+//        gain_a *= -1;
+//        phases_inverted = true; // signal that pins have been inverted
+//    }
+//
+//    // at this point the driver's phase A is aligned with the ADC pinA
+//    // and the pin B should be the phase B
+//
+//    // set phase B active and phases A down
+//    // ramp 300ms
+//    for(int i=0; i < 100; i++){
+//        stepper_driver->setPwm(0, voltage/100.0*((float)i));
+//        _delay(3);
+//    }
+//    _delay(500);
+//    c = readAverageCurrents();
+//    stepper_driver->setPwm(0, 0);
+//
+//    // phase B should be aligned
+//    // 1) we just need to verify that it has been measured
+//    if (fabs(c.b) < 0.1f ){
+//        SIMPLEFOC_DEBUG("CS: Err too low current on B!");
+//        return 0; // measurement current too low
+//    }
+//    // 2) check if measured current a is positive and invert if not
+//    if (c.b < 0){
+//        SIMPLEFOC_DEBUG("CS: Inv B");
+//        gain_b *= -1;
+//        phases_inverted = true; // signal that pins have been inverted
+//    }
+//
+//    // construct the return flag
+//    // if success and nothing changed return 1
+//    // if the phases have been switched return 2
+//    // if the gains have been inverted return 3
+//    // if both return 4
+//    uint8_t exit_flag = 1;
+//    if(phases_switched) exit_flag += 1;
+//    if(phases_inverted) exit_flag += 2;
+//    return exit_flag;
+//}
+//
 

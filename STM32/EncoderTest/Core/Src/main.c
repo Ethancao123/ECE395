@@ -96,6 +96,12 @@ int main(void)
   float val;
   float val2;
   uint8_t error;
+  buf[0] = 0x30;
+  ret = HAL_I2C_Master_Transmit(&hi2c1, MT6701_ADDR, buf, 1, HAL_MAX_DELAY);
+  if ( ret != HAL_OK )
+  	 error = 1;
+  else
+	 ret = HAL_I2C_Master_Receive(&hi2c1, MT6701_ADDR, buf, 1, HAL_MAX_DELAY);
   /* USER CODE END 2 */
 
   /* Infinite loop */
