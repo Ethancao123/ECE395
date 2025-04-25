@@ -1,5 +1,6 @@
 #ifndef SENSOR_H
 #define SENSOR_H
+
 #include <inttypes.h>
 
 /**
@@ -40,7 +41,7 @@ enum Pullup : uint8_t {
  * optimal implementations for your hardware.
  * 
  */
-class Sensor{
+class Sensor {
 	friend class SmoothingSensor;
     public:
         /**
@@ -48,6 +49,8 @@ class Sensor{
          * the hardware. Base implementation uses the values returned by update() so that 
          * the same values are returned until update() is called again.
          */
+
+		void init();
         virtual float getMechanicalAngle();
 
         /**

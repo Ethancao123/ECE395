@@ -323,7 +323,7 @@ int CurrentSense::alignBLDCDriver(float voltage, BLDCDriver* bldc_driver, bool m
 //                SIMPLEFOC_DEBUG("CS: Err align B");
                 return 0;
             case 2: // phase C is the max current
-                SIMPLEFOC_DEBUG("CS: Switch B-C");
+//                SIMPLEFOC_DEBUG("CS: Switch B-C");
                 _swap(pinB, pinC);
                 _swap(offset_ib, offset_ic);
                 _swap(gain_b, gain_c);

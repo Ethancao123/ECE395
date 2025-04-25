@@ -1,6 +1,6 @@
 #include "BLDCDriver6PWM.h"
 
-BLDCDriver6PWM::BLDCDriver6PWM(int phA_h,int phA_l,int phB_h,int phB_l,int phC_h,int phC_l, int en){
+BLDCDriver6PWM::BLDCDriver6PWM(int phA_h,int phA_l,int phB_h,int phB_l,int phC_h,int phC_l, int en, GPIO_TypeDef* enp){
   // Pin initialization
   pwmA_h = phA_h;
   pwmB_h = phB_h;
@@ -11,6 +11,7 @@ BLDCDriver6PWM::BLDCDriver6PWM(int phA_h,int phA_l,int phB_h,int phB_l,int phC_h
 
   // enable_pin pin
   enable_pin = en;
+  enable_port = enp;
 
   // default power-supply value
   voltage_power_supply = DEF_POWER_SUPPLY;
@@ -25,7 +26,9 @@ BLDCDriver6PWM::BLDCDriver6PWM(int phA_h,int phA_l,int phB_h,int phB_l,int phC_h
 // enable motor driver
 void  BLDCDriver6PWM::enable(){
     // enable_pin the driver - if enable_pin pin available
-    if ( _isset(enable_pin) ) digitalWrite(enable_pin, enable_active_high);
+//    if ( _isset(enable_pin) ) digitalWrite(enable_pin, enable_active_high);
+    HAL_GPIO_WritePin(enable_port, enable_pin, GPIO_PIN_SET);
+
     // set phase state enabled
     setPhaseState(PhaseState::PHASE_ON, PhaseState::PHASE_ON, PhaseState::PHASE_ON);
     // set zero to PWM
@@ -40,7 +43,8 @@ void BLDCDriver6PWM::disable()
   // set zero to PWM
   setPwm(0, 0, 0);
   // disable the driver - if enable_pin pin available
-  if ( _isset(enable_pin) ) digitalWrite(enable_pin, !enable_active_high);
+//  if ( _isset(enable_pin) ) digitalWrite(enable_pin, !enable_active_high);
+  HAL_GPIO_WritePin(enable_port, enable_pin, GPIO_PIN_RESET);
 
 }
 
@@ -48,13 +52,13 @@ void BLDCDriver6PWM::disable()
 int BLDCDriver6PWM::init() {
 
   // PWM pins
-  pinMode(pwmA_h, OUTPUT);
-  pinMode(pwmB_h, OUTPUT);
-  pinMode(pwmC_h, OUTPUT);
-  pinMode(pwmA_l, OUTPUT);
-  pinMode(pwmB_l, OUTPUT);
-  pinMode(pwmC_l, OUTPUT);
-  if(_isset(enable_pin)) pinMode(enable_pin, OUTPUT);
+//  pinMode(pwmA_h, OUTPUT);
+//  pinMode(pwmB_h, OUTPUT);
+//  pinMode(pwmC_h, OUTPUT);
+//  pinMode(pwmA_l, OUTPUT);
+//  pinMode(pwmB_l, OUTPUT);
+//  pinMode(pwmC_l, OUTPUT);
+//  if(_isset(enable_pin)) pinMode(enable_pin, OUTPUT);
 
 
   // sanity check for the voltage limit configuration

@@ -1,5 +1,4 @@
 #include "InlineCurrentSense.h"
-#include "communication/SimpleFOCDebug.h"
 // InlineCurrentSensor constructor
 //  - shunt_resistor  - shunt resistor value
 //  - gain  - current-sense op-amp gain

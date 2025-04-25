@@ -1,0 +1,11 @@
+/Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.macos64_1.0.0.202411102158/tools/arm-none-eabi/include/c++/13.3.1/cmath:234:3:constexpr float std::fabs(float)	1
+../Core/simplefoc-stm32/common/base_classes/CurrentSense.cpp:7:7:virtual float CurrentSense::getDCCurrent(float)	3
+../Core/simplefoc-stm32/common/base_classes/CurrentSense.cpp:34:13:DQCurrent_s CurrentSense::getFOCCurrents(float)	1
+../Core/simplefoc-stm32/common/base_classes/CurrentSense.cpp:50:13:ABCurrent_s CurrentSense::getABCurrents(PhaseCurrent_s)	5
+../Core/simplefoc-stm32/common/base_classes/CurrentSense.cpp:96:13:DQCurrent_s CurrentSense::getDQCurrents(ABCurrent_s, float)	1
+../Core/simplefoc-stm32/common/base_classes/CurrentSense.cpp:110:6:void CurrentSense::linkDriver(FOCDriver*)	1
+../Core/simplefoc-stm32/common/base_classes/CurrentSense.cpp:117:6:virtual void CurrentSense::enable()	1
+../Core/simplefoc-stm32/common/base_classes/CurrentSense.cpp:121:6:virtual void CurrentSense::disable()	1
+../Core/simplefoc-stm32/common/base_classes/CurrentSense.cpp:135:5:virtual int CurrentSense::driverAlign(float, bool)	3
+../Core/simplefoc-stm32/common/base_classes/CurrentSense.cpp:148:16:PhaseCurrent_s CurrentSense::readAverageCurrents(int)	2
+../Core/simplefoc-stm32/common/base_classes/CurrentSense.cpp:170:5:int CurrentSense::alignBLDCDriver(float, BLDCDriver*, bool)	46

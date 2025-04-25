@@ -24,14 +24,6 @@ MagneticSensorI2CConfig_s MT6701_I2C = {
   .data_start_bit = 15
 };
 
-void configurePinAsInput(GPIO_TypeDef* port, uint16_t pin) {
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-    GPIO_InitStruct.Pin = pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(port, &GPIO_InitStruct);
-}
-
 // MagneticSensorI2C(uint8_t _chip_address, float _cpr, uint8_t _angle_register_msb)
 //  @param _chip_address  I2C chip address
 //  @param _bit_resolution  bit resolution of the sensor
@@ -55,7 +47,6 @@ MagneticSensorI2C::MagneticSensorI2C(uint8_t _chip_address, int _bit_resolution,
   // extraction masks
   lsb_mask = (uint8_t)( (2 << lsb_used) - 1 );
   msb_mask = (uint8_t)( (2 << _bits_used_msb) - 1 );
-  wire = &Wire;
 }
 
 MagneticSensorI2C::MagneticSensorI2C(MagneticSensorI2CConfig_s config){
@@ -71,19 +62,15 @@ MagneticSensorI2C::MagneticSensorI2C(MagneticSensorI2CConfig_s config){
   // extraction masks
   lsb_mask = (uint8_t)( (2 << lsb_used) - 1 );
   msb_mask = (uint8_t)( (2 << bits_used_msb) - 1 );
-  wire = &Wire;
 }
 
 MagneticSensorI2C MagneticSensorI2C::AS5600() {
   return {AS5600_I2C};
 }
 
-void MagneticSensorI2C::init(TwoWire* _wire){
+void MagneticSensorI2C::init(I2C_HandleTypeDef* _wire){
 
   wire = _wire;
-
-  // I2C communication begin
-  wire->begin();
 
   this->Sensor::init(); // call base class init
 }
@@ -110,27 +97,31 @@ int MagneticSensorI2C::getRawCount(){
 */
 int MagneticSensorI2C::read(uint8_t angle_reg_msb) {
   // read the angle register first MSB then LSB
-	byte readArray[2];
-	uint16_t readValue = 0;
   // notify the device that is aboout to be read
-	wire->beginTransmission(chip_address);
-	wire->write(angle_reg_msb);
-  currWireError = wire->endTransmission(false);
 
-  // read the data msb and lsb
-	wire->requestFrom(chip_address, (uint8_t)2);
-	for (byte i=0; i < 2; i++) {
-		readArray[i] = wire->read();
-	}
+//	wire->beginTransmission(chip_address);
+//	wire->write(angle_reg_msb);
+//	currWireError = wire->endTransmission(false);
+	static const uint8_t MT6701_ADDR = 0b0000110 << 1; // Use 8-bit address
+	uint8_t buf[2];
+	buf[0] = 0x03;
+	HAL_I2C_Master_Transmit(wire, MT6701_ADDR, buf, 1, HAL_MAX_DELAY);
+	HAL_I2C_Master_Receive(wire , MT6701_ADDR, buf, 2, HAL_MAX_DELAY);
 
-  // depending on the sensor architecture there are different combinations of
-  // LSB and MSB register used bits
-  // AS5600 uses 0..7 LSB and 8..11 MSB
-  // AS5048 uses 0..5 LSB and 6..13 MSB
-  // MT6701 uses 0..5 LSB and 6..13 MSB
-  readValue = ( readArray[1] &  lsb_mask );
-	readValue += ( ( readArray[0] & msb_mask ) << lsb_used );
-	return readValue;
+//  // read the data msb and lsb
+//	wire->requestFrom(chip_address, (uint8_t)2);
+//	for (byte i=0; i < 2; i++) {
+//		readArray[i] = wire->read();
+//	}
+//
+//  // depending on the sensor architecture there are different combinations of
+//  // LSB and MSB register used bits
+//  // AS5600 uses 0..7 LSB and 8..11 MSB
+//  // AS5048 uses 0..5 LSB and 6..13 MSB
+//  // MT6701 uses 0..5 LSB and 6..13 MSB
+//  readValue = ( readArray[1] &  lsb_mask );
+//	readValue += ( ( readArray[0] & msb_mask ) << lsb_used );
+	return ((int16_t)buf[0] << 6) | ((int16_t)buf[1] >> 2);
 }
 //
 ///*

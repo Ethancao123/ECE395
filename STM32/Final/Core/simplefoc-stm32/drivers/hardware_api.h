@@ -3,7 +3,6 @@
 
 #include "../common/foc_utils.h"
 #include "../common/time_utils.h"
-#include "../communication/SimpleFOCDebug.h"
 #include "../common/base_classes/BLDCDriver.h"
 
 

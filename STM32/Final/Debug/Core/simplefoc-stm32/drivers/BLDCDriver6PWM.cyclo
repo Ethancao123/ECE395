@@ -1,0 +1,9 @@
+../Core/simplefoc-stm32/drivers/../common/base_classes/BLDCDriver.h:32:28:virtual DriverType BLDCDriver::type()	1
+../Core/simplefoc-stm32/drivers/../common/base_classes/FOCDriver.h:22:7:FOCDriver::FOCDriver()	1
+../Core/simplefoc-stm32/drivers/../common/base_classes/BLDCDriver.h:6:7:BLDCDriver::BLDCDriver()	1
+../Core/simplefoc-stm32/drivers/BLDCDriver6PWM.cpp:3:1:BLDCDriver6PWM::BLDCDriver6PWM(int, int, int, int, int, int, int, GPIO_TypeDef*)	1
+../Core/simplefoc-stm32/drivers/BLDCDriver6PWM.cpp:27:7:virtual void BLDCDriver6PWM::enable()	1
+../Core/simplefoc-stm32/drivers/BLDCDriver6PWM.cpp:39:6:virtual void BLDCDriver6PWM::disable()	1
+../Core/simplefoc-stm32/drivers/BLDCDriver6PWM.cpp:52:5:virtual int BLDCDriver6PWM::init()	3
+../Core/simplefoc-stm32/drivers/BLDCDriver6PWM.cpp:84:6:virtual void BLDCDriver6PWM::setPwm(float, float, float)	13
+../Core/simplefoc-stm32/drivers/BLDCDriver6PWM.cpp:103:6:virtual void BLDCDriver6PWM::setPhaseState(PhaseState, PhaseState, PhaseState)	1

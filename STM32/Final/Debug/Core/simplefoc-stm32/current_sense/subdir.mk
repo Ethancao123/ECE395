@@ -5,16 +5,13 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../Core/simplefoc-stm32/current_sense/InlineCurrentSense.cpp \
-../Core/simplefoc-stm32/current_sense/LowsideCurrentSense.cpp 
+../Core/simplefoc-stm32/current_sense/InlineCurrentSense.cpp 
 
 OBJS += \
-./Core/simplefoc-stm32/current_sense/InlineCurrentSense.o \
-./Core/simplefoc-stm32/current_sense/LowsideCurrentSense.o 
+./Core/simplefoc-stm32/current_sense/InlineCurrentSense.o 
 
 CPP_DEPS += \
-./Core/simplefoc-stm32/current_sense/InlineCurrentSense.d \
-./Core/simplefoc-stm32/current_sense/LowsideCurrentSense.d 
+./Core/simplefoc-stm32/current_sense/InlineCurrentSense.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -24,7 +21,7 @@ Core/simplefoc-stm32/current_sense/%.o Core/simplefoc-stm32/current_sense/%.su C
 clean: clean-Core-2f-simplefoc-2d-stm32-2f-current_sense
 
 clean-Core-2f-simplefoc-2d-stm32-2f-current_sense:
-	-$(RM) ./Core/simplefoc-stm32/current_sense/InlineCurrentSense.cyclo ./Core/simplefoc-stm32/current_sense/InlineCurrentSense.d ./Core/simplefoc-stm32/current_sense/InlineCurrentSense.o ./Core/simplefoc-stm32/current_sense/InlineCurrentSense.su ./Core/simplefoc-stm32/current_sense/LowsideCurrentSense.cyclo ./Core/simplefoc-stm32/current_sense/LowsideCurrentSense.d ./Core/simplefoc-stm32/current_sense/LowsideCurrentSense.o ./Core/simplefoc-stm32/current_sense/LowsideCurrentSense.su
+	-$(RM) ./Core/simplefoc-stm32/current_sense/InlineCurrentSense.cyclo ./Core/simplefoc-stm32/current_sense/InlineCurrentSense.d ./Core/simplefoc-stm32/current_sense/InlineCurrentSense.o ./Core/simplefoc-stm32/current_sense/InlineCurrentSense.su
 
 .PHONY: clean-Core-2f-simplefoc-2d-stm32-2f-current_sense
 

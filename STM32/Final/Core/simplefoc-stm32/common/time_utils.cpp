@@ -11,11 +11,15 @@ void _delay(unsigned long ms){
   while( _micros() < t ){}; 
 #else
   // regular micros
-  delay(ms);
+  HAL_Delay(ms);
 #endif
 }
 
-
+void DWT_Init(void) {
+        CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+        DWT->CYCCNT = 0;
+        DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+    }
 // function buffering _micros() 
 // arduino function doesn't work well with interrupts
 unsigned long _micros(){
@@ -26,6 +30,10 @@ unsigned long _micros(){
     else return (micros());
 #else
   // regular micros
-  return micros();
+//  return micros();
+
+    // Then, read microseconds
+
+    return DWT->CYCCNT / (HAL_RCC_GetHCLKFreq() / 1000000);
 #endif
 }

@@ -1,0 +1,8 @@
+../Core/simplefoc-stm32/sensors/../common/base_classes/Sensor.h:44:7:constexpr Sensor::Sensor()	1
+../Core/simplefoc-stm32/sensors/MagneticSensorI2C.cpp:32:1:MagneticSensorI2C::MagneticSensorI2C(uint8_t, int, uint8_t, int)	1
+../Core/simplefoc-stm32/sensors/MagneticSensorI2C.cpp:52:1:MagneticSensorI2C::MagneticSensorI2C(MagneticSensorI2CConfig_s)	1
+../Core/simplefoc-stm32/sensors/MagneticSensorI2C.cpp:67:19:static MagneticSensorI2C MagneticSensorI2C::AS5600()	1
+../Core/simplefoc-stm32/sensors/MagneticSensorI2C.cpp:71:6:void MagneticSensorI2C::init(I2C_HandleTypeDef*)	1
+../Core/simplefoc-stm32/sensors/MagneticSensorI2C.cpp:80:7:virtual float MagneticSensorI2C::getSensorAngle()	1
+../Core/simplefoc-stm32/sensors/MagneticSensorI2C.cpp:88:5:int MagneticSensorI2C::getRawCount()	1
+../Core/simplefoc-stm32/sensors/MagneticSensorI2C.cpp:98:5:int MagneticSensorI2C::read(uint8_t)	1

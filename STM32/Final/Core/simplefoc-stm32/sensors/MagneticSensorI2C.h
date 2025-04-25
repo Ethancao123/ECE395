@@ -43,7 +43,7 @@ class MagneticSensorI2C: public Sensor{
     static MagneticSensorI2C AS5600();
         
     /** sensor initialise pins */
-    void init(TwoWire* _wire = &Wire);
+    void init(I2C_HandleTypeDef* _wire);
 
     // implementation of abstract functions of the Sensor class
     /** get current angle (rad) */
@@ -76,7 +76,7 @@ class MagneticSensorI2C: public Sensor{
     int getRawCount();
     
     /* the two wire instance for this sensor */
-    TwoWire* wire;
+    I2C_HandleTypeDef* wire;
 
 
 };

@@ -3,6 +3,7 @@
 #define STM32_CURRENTSENSE_MCU_DEF
 #include "../../hardware_api.h"
 #include "../../../common/foc_utils.h"
+#include "stm32g4xx_hal_tim.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -22,8 +23,8 @@ extern "C" {
 typedef struct Stm32CurrentSenseParams {
   int pins[3] = {(int)NOT_SET};
   float adc_voltage_conv;
-  ADC_HandleTypeDef* adc_handle = NP;
-  HardwareTimer* timer_handle = NP;
+  ADC_HandleTypeDef* adc_handle = nullptr;
+  TIM_HandleTypeDef timer_handle;
 } Stm32CurrentSenseParams;
 
 #endif
