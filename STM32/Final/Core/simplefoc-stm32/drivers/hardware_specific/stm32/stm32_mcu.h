@@ -17,7 +17,7 @@
 
 
 typedef struct STM32DriverParams {
-  HardwareTimer* timers[6] = {NULL};
+  TIM_HandleTypeDef* timers[6];
   uint32_t channels[6];
   long pwm_frequency;
   float dead_zone;
@@ -25,8 +25,8 @@ typedef struct STM32DriverParams {
 } STM32DriverParams;
 
 // timer synchornisation functions
-void _stopTimers(HardwareTimer **timers_to_stop, int timer_num=6);
-void _startTimers(HardwareTimer **timers_to_start, int timer_num=6);
+void _stopTimers(TIM_HandleTypeDef*, int timer_num=6);
+void _startTimers(TIM_HandleTypeDef*, int timer_num=6);
 
 // timer query functions
 bool _getPwmState(void* params);

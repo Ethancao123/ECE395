@@ -1,4 +1,0 @@
-../Core/simplefoc-stm32/current_sense/hardware_specific/stm32/stm32_mcu.cpp:11:6:void configurePinAsInput(GPIO_TypeDef*, uint16_t)	1
-../Core/simplefoc-stm32/current_sense/hardware_specific/stm32/stm32_mcu.cpp:20:7:void* _configureADCInline(const void*, GPIO_TypeDef*, uint8_t, GPIO_TypeDef*, uint8_t, GPIO_TypeDef*, uint8_t)	1
-../Core/simplefoc-stm32/current_sense/hardware_specific/stm32/stm32_mcu.cpp:39:10:uint16_t analogReadSTM32(ADC_HandleTypeDef*, uint32_t)	1
-../Core/simplefoc-stm32/current_sense/hardware_specific/stm32/stm32_mcu.cpp:63:30:float _readADCVoltageInline(ADC_HandleTypeDef*, uint32_t, const void*)	1

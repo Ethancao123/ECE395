@@ -1,6 +1,0 @@
-../Core/simplefoc-stm32/current_sense/../common/base_classes/CurrentSense.h:13:7:CurrentSense::CurrentSense()	1
-../Core/simplefoc-stm32/current_sense/InlineCurrentSense.cpp:8:1:InlineCurrentSense::InlineCurrentSense(float, float, int, int, int)	1
-../Core/simplefoc-stm32/current_sense/InlineCurrentSense.cpp:23:1:InlineCurrentSense::InlineCurrentSense(float, int, int, int)	1
-../Core/simplefoc-stm32/current_sense/InlineCurrentSense.cpp:38:5:virtual int InlineCurrentSense::init()	5
-../Core/simplefoc-stm32/current_sense/InlineCurrentSense.cpp:60:6:void InlineCurrentSense::calibrateOffsets()	8
-../Core/simplefoc-stm32/current_sense/InlineCurrentSense.cpp:81:16:virtual PhaseCurrent_s InlineCurrentSense::getPhaseCurrents()	4

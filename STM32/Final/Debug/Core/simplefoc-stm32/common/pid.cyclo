@@ -1,3 +1,0 @@
-../Core/simplefoc-stm32/common/pid.cpp:3:1:PIDController::PIDController(float, float, float, float, float)	1
-../Core/simplefoc-stm32/common/pid.cpp:17:7:float PIDController::operator()(float)	10
-../Core/simplefoc-stm32/common/pid.cpp:60:6:void PIDController::reset()	1

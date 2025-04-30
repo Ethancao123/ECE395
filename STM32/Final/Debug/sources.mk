@@ -40,14 +40,5 @@ CPP_DEPS :=
 SUBDIRS := \
 Core/Src \
 Core/Startup \
-Core/simplefoc-stm32 \
-Core/simplefoc-stm32/common/base_classes \
-Core/simplefoc-stm32/common \
-Core/simplefoc-stm32/current_sense \
-Core/simplefoc-stm32/current_sense/hardware_specific/stm32/b_g431 \
-Core/simplefoc-stm32/current_sense/hardware_specific/stm32 \
-Core/simplefoc-stm32/drivers \
-Core/simplefoc-stm32/drivers/hardware_specific/stm32 \
-Core/simplefoc-stm32/sensors \
 Drivers/STM32G4xx_HAL_Driver/Src \
 

@@ -1,5 +1,19 @@
 #include "BLDCDriver6PWM.h"
 
+BLDCDriver6PWM::BLDCDriver6PWM() {
+	// Pin initialization
+	  pwmA_h = phA_h;
+	  pwmB_h = phB_h;
+	  pwmC_h = phC_h;
+	  pwmA_l = phA_l;
+	  pwmB_l = phB_l;
+	  pwmC_l = phC_l;
+
+	  // enable_pin pin
+	  enable_pin = en;
+	  enable_port = enp;
+}
+
 BLDCDriver6PWM::BLDCDriver6PWM(int phA_h,int phA_l,int phB_h,int phB_l,int phC_h,int phC_l, int en, GPIO_TypeDef* enp){
   // Pin initialization
   pwmA_h = phA_h;

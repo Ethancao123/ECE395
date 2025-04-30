@@ -13,6 +13,7 @@
 class BLDCDriver6PWM: public BLDCDriver
 {
   public:
+	BLDCDriver6PWM();
     /**
       BLDCDriver class constructor
       @param phA_h A phase pwm pin

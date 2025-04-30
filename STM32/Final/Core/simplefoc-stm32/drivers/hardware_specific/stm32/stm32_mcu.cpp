@@ -1,13 +1,10 @@
 
 #include "../../hardware_api.h"
 #include "stm32_mcu.h"
+#include "stm32g4xx_ll_tim.h"
+#include "PeripheralPins.h"
 
 #if defined(_STM32_DEF_)
-
-#define SIMPLEFOC_STM32_DEBUG
-#pragma message("")
-#pragma message("SimpleFOC: compiling for STM32")
-#pragma message("")
 
 
 #ifdef SIMPLEFOC_STM32_DEBUG
@@ -28,8 +25,8 @@ PinMap* timerPinsUsed[SIMPLEFOC_STM32_MAX_PINTIMERSUSED];
 
 bool _getPwmState(void* params) {
   // assume timers are synchronized and that there's at least one timer
-  HardwareTimer* pHT = ((STM32DriverParams*)params)->timers[0];
-  TIM_HandleTypeDef* htim = pHT->getHandle();
+//  HardwareTimer* pHT = ((STM32DriverParams*)params)->timers[0];
+  TIM_HandleTypeDef* htim = ((STM32DriverParams*)params)->timers[0];
   
   bool dir = __HAL_TIM_IS_TIM_COUNTING_DOWN(htim);
 
@@ -38,34 +35,21 @@ bool _getPwmState(void* params) {
 
 
 // setting pwm to hardware pin - instead analogWrite()
-void _setPwm(HardwareTimer *HT, uint32_t channel, uint32_t value, int resolution)
+void _setPwm(TIM_HandleTypeDef* HT, uint32_t channel, uint32_t value, int resolution)
 {
   // TODO - remove commented code
   // PinName pin = digitalPinToPinName(ulPin);
   // TIM_TypeDef *Instance = (TIM_TypeDef *)pinmap_peripheral(pin, PinMap_PWM);
   // uint32_t index = get_timer_index(Instance);
   // HardwareTimer *HT = (HardwareTimer *)(HardwareTimer_Handle[index]->__this);
-  
-  HT->setCaptureCompare(channel, value, (TimerCompareFormat_t)resolution);
+
+  __HAL_TIM_SET_COMPARE(HT, channel, value);
 }
 
 
 
 
 int getLLChannel(PinMap* timer) {
-#if defined(TIM_CCER_CC1NE)
-  if (STM_PIN_INVERTED(timer->function)) {
-    switch (STM_PIN_CHANNEL(timer->function)) {
-      case 1: return LL_TIM_CHANNEL_CH1N;
-      case 2: return LL_TIM_CHANNEL_CH2N;
-      case 3: return LL_TIM_CHANNEL_CH3N;
-#if defined(LL_TIM_CHANNEL_CH4N)
-      case 4: return LL_TIM_CHANNEL_CH4N;
-#endif
-      default: return -1;
-    }
-  } else
-#endif
   {
     switch (STM_PIN_CHANNEL(timer->function)) {
       case 1: return LL_TIM_CHANNEL_CH1;
@@ -80,36 +64,67 @@ int getLLChannel(PinMap* timer) {
 
 
 
-
+// Helper to get timer index (TIM1 -> 0, TIM2 -> 1, etc.)
+uint32_t get_timer_index(TIM_TypeDef* instance);
 
 // init pin pwm
-HardwareTimer* _initPinPWM(uint32_t PWM_freq, PinMap* timer) {
-  // sanity check
-  if (timer==NP)
-    return NP;
-  uint32_t index = get_timer_index((TIM_TypeDef*)timer->peripheral);
-  bool init = false;
-  if (HardwareTimer_Handle[index] == NULL) {
-    HardwareTimer_Handle[index]->__this = new HardwareTimer((TIM_TypeDef*)timer->peripheral);
-    HardwareTimer_Handle[index]->handle.Init.CounterMode = TIM_COUNTERMODE_CENTERALIGNED3;
-    HardwareTimer_Handle[index]->handle.Init.RepetitionCounter = 1;
-    HAL_TIM_Base_Init(&(HardwareTimer_Handle[index]->handle));
-    init = true;
-  }
-  HardwareTimer *HT = (HardwareTimer *)(HardwareTimer_Handle[index]->__this);
-  uint32_t channel = STM_PIN_CHANNEL(timer->function);
-  HT->pause();
-  if (init)
-    HT->setOverflow(PWM_freq, HERTZ_FORMAT);
-  HT->setMode(channel, TIMER_OUTPUT_COMPARE_PWM1, timer->pin);
-  #if SIMPLEFOC_PWM_ACTIVE_HIGH==false
-  LL_TIM_OC_SetPolarity(HT->getHandle()->Instance, getLLChannel(timer), LL_TIM_OCPOLARITY_LOW);
-  #endif
-#ifdef SIMPLEFOC_STM32_DEBUG
-  SIMPLEFOC_DEBUG("STM32-DRV: Configuring high timer ", (int)getTimerNumber(get_timer_index(HardwareTimer_Handle[index]->handle.Instance)));
-  SIMPLEFOC_DEBUG("STM32-DRV: Configuring high channel ", (int)channel);
+TIM_HandleTypeDef* _initPinPWM(uint32_t PWM_freq, const PinMap* timer) {
+	TIM_HandleTypeDef* TimerHandles[] = (STM32DriverParams*)params)->timers;
+	if (timer == nullptr || timer->peripheral == NP) {
+        return nullptr;
+    }
+
+    uint32_t index = get_timer_index((TIM_TypeDef*)timer->peripheral);
+
+    bool init = false;
+    if (TimerHandles[index] == NULL) {
+        // Allocate and initialize new timer handle
+        TimerHandles[index] = (TIM_HandleTypeDef*)malloc(sizeof(TIM_HandleTypeDef));
+        TimerHandles[index]->Instance = (TIM_TypeDef*)timer->peripheral;
+        TimerHandles[index]->Init.Prescaler = (SystemCoreClock / (PWM_freq * 65535)) - 1; // Prescale to fit ARR
+        TimerHandles[index]->Init.CounterMode = TIM_COUNTERMODE_CENTERALIGNED3; // Center aligned
+        TimerHandles[index]->Init.Period = 65535;  // Default period, can adjust
+        TimerHandles[index]->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+        TimerHandles[index]->Init.RepetitionCounter = 1;
+        TimerHandles[index]->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
+        HAL_TIM_Base_Init(TimerHandles[index]);
+        HAL_TIM_PWM_Init(TimerHandles[index]);
+
+        init = true;
+    }
+
+    TIM_HandleTypeDef* htim = TimerHandles[index];
+
+    uint32_t channel = 0;
+    switch (STM_PIN_CHANNEL(timer->function)) {
+        case 1: channel = TIM_CHANNEL_1; break;
+        case 2: channel = TIM_CHANNEL_2; break;
+        case 3: channel = TIM_CHANNEL_3; break;
+        case 4: channel = TIM_CHANNEL_4; break;
+        default: return nullptr;
+    }
+
+    // PWM config
+    TIM_OC_InitTypeDef sConfigOC = {0};
+    sConfigOC.OCMode = TIM_OCMODE_PWM1;
+    sConfigOC.Pulse = htim->Init.Period / 2; // 50% duty cycle at init
+    sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+    sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+
+#if SIMPLEFOC_PWM_ACTIVE_HIGH==false
+    sConfigOC.OCPolarity = TIM_OCPOLARITY_LOW;
 #endif
-  return HT;
+
+    HAL_TIM_PWM_ConfigChannel(htim, &sConfigOC, channel);
+    HAL_TIM_PWM_Start(htim, channel);
+
+#ifdef SIMPLEFOC_STM32_DEBUG
+    SIMPLEFOC_DEBUG("STM32-DRV: Configuring high timer ", (int)getTimerNumber(index));
+    SIMPLEFOC_DEBUG("STM32-DRV: Configuring high channel ", (int)channel);
+#endif
+
+    return htim;
 }
 
 
@@ -210,7 +225,7 @@ void _stopTimers(HardwareTimer **timers_to_stop, int timer_num)
     #endif
   }
 }
-
+#define STM32G4xx
 
 #if defined(STM32G4xx)
 // function finds the appropriate timer source trigger for the master/slave timer combination

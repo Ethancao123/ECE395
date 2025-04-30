@@ -1,0 +1,5 @@
+../Core/Src/drv8316.cpp:10:1:Driver::Driver(SPI_HandleTypeDef*, GPIO_TypeDef*, uint16_t, GPIO_TypeDef*, uint16_t)	1
+../Core/Src/drv8316.cpp:20:6:void Driver::init()	1
+../Core/Src/drv8316.cpp:24:6:void Driver::reset()	1
+../Core/Src/drv8316.cpp:32:10:uint8_t* Driver::writeReg(uint16_t, uint16_t)	2
+../Core/Src/drv8316.cpp:56:10:uint8_t* Driver::readReg(uint16_t)	2
