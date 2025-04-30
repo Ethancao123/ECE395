@@ -1,14 +1,15 @@
-../Core/Src/main.cpp:83:5:int main()	2
-../Core/Src/main.cpp:158:6:void outputElecAngle(uint16_t, uint16_t)	1
-../Core/Src/main.cpp:179:6:void SystemClock_Config()	3
-../Core/Src/main.cpp:220:13:void MX_ADC1_Init()	4
-../Core/Src/main.cpp:288:13:void MX_ADC2_Init()	3
-../Core/Src/main.cpp:347:13:void MX_I2C1_Init()	4
-../Core/Src/main.cpp:395:13:void MX_SPI2_Init()	2
-../Core/Src/main.cpp:435:13:void MX_SPI3_Init()	2
-../Core/Src/main.cpp:475:13:void MX_TIM1_Init()	7
-../Core/Src/main.cpp:556:13:void MX_USART2_UART_Init()	5
-../Core/Src/main.cpp:604:13:void MX_GPIO_Init()	1
-../Core/Src/main.cpp:649:6:void Error_Handler()	1
-/Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.macos64_1.0.0.202411102158/tools/arm-none-eabi/include/c++/13.3.1/cmath:189:5:constexpr typename __gnu_cxx::__enable_if<std::__is_integer<_Tp>::__value, double>::__type std::cos(_Tp) [with _Tp = short unsigned int]	1
-/Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.macos64_1.0.0.202411102158/tools/arm-none-eabi/include/c++/13.3.1/cmath:412:5:constexpr typename __gnu_cxx::__enable_if<std::__is_integer<_Tp>::__value, double>::__type std::sin(_Tp) [with _Tp = short unsigned int]	1
+/Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.macos64_1.0.0.202411102158/tools/arm-none-eabi/include/c++/13.3.1/cmath:177:3:constexpr float std::cos(float)	1
+/Applications/STM32CubeIDE.app/Contents/Eclipse/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.macos64_1.0.0.202411102158/tools/arm-none-eabi/include/c++/13.3.1/cmath:400:3:constexpr float std::sin(float)	1
+../Core/Src/main.cpp:84:5:int main()	2
+../Core/Src/main.cpp:160:6:void outputTargetAngle(uint16_t, uint16_t)	1
+../Core/Src/main.cpp:164:6:void outputElecAngle(float, uint16_t)	1
+../Core/Src/main.cpp:184:6:void SystemClock_Config()	3
+../Core/Src/main.cpp:225:13:void MX_ADC1_Init()	4
+../Core/Src/main.cpp:293:13:void MX_ADC2_Init()	3
+../Core/Src/main.cpp:352:13:void MX_I2C1_Init()	4
+../Core/Src/main.cpp:400:13:void MX_SPI2_Init()	2
+../Core/Src/main.cpp:440:13:void MX_SPI3_Init()	2
+../Core/Src/main.cpp:480:13:void MX_TIM1_Init()	7
+../Core/Src/main.cpp:561:13:void MX_USART2_UART_Init()	5
+../Core/Src/main.cpp:609:13:void MX_GPIO_Init()	1
+../Core/Src/main.cpp:654:6:void Error_Handler()	1

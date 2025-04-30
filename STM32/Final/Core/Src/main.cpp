@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 //#include "SimpleFOC.h"
 #include "drv8316.h"
+#include "magsensor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,7 +55,7 @@ TIM_HandleTypeDef htim1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-extern void outputElecAngle(uint16_t angle, uint16_t power);
+extern void outputElecAngle(float angle, uint16_t power);
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -116,6 +117,8 @@ int main(void)
   uint8_t temp[12][3];
   Driver drv(&hspi2, GPIOC, SLEEP_N_Pin, GPIOC, SCS_N_Pin);
   drv.init();
+  Encoder enc(&hi2c1);
+  enc.zero();
 
   HAL_TIM_PWM_Start_IT (&htim1, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start_IT (&htim1, TIM_CHANNEL_2);
@@ -147,16 +150,15 @@ int main(void)
 //	  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 0);
 //	  HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
-	 for(int i = 0; i < 360; i++) {
-		 outputElecAngle(i,30); //use >20 for power
-	 	 HAL_Delay(100);
-	 }
+
   }
   /* USER CODE END 3 */
 }
+void outputTargetAngle(float angle, uint16_t power) {
+	outputElecAngle(angle/8, power);
+}
 
-void outputElecAngle(uint16_t angle, uint16_t power) {
-	angle %= 360;
+void outputElecAngle(float angle, uint16_t power) {
 	//polar to xy
 	float alpha = cos(angle) * power;
 	float beta = sin(angle) * power;
@@ -164,9 +166,9 @@ void outputElecAngle(uint16_t angle, uint16_t power) {
 	float a = alpha;
 	float b = -0.5*alpha + 0.8660254*beta; //sqrt(3)/2 is weird const
 	float c = -0.5*alpha - 0.8660254*beta;
-	uint8_t pwma = ((uint8_t)a) + 150; //scale to center of pwm range
-	uint8_t pwmb = ((uint8_t)b) + 150;
-	uint8_t pwmc = ((uint8_t)c) + 150;
+	uint8_t pwma = ((int16_t)a) + 150; //scale to center of pwm range
+	uint8_t pwmb = ((int16_t)b) + 150;
+	uint8_t pwmc = ((int16_t)c) + 150;
 	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, pwma);
 	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, pwmb);
 	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, pwmc);

@@ -1,0 +1,3 @@
+../Core/Src/magsensor.cpp:11:1:Encoder::Encoder(I2C_HandleTypeDef*)	2
+../Core/Src/magsensor.cpp:22:7:float Encoder::getAngle()	4
+../Core/Src/magsensor.cpp:45:6:void Encoder::zero()	1
