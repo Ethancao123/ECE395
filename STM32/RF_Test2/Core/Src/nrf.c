@@ -12,15 +12,16 @@ SPI_HandleTypeDef bus;
 bool isTX;
 
 void setCS(bool state){
-	HAL_GPIO_WritePin(CSN_GPIO_Port, CSN_Pin, state);
+	HAL_GPIO_WritePin(csnPort, csnPin, state);
 }
 
 void setCE(bool state){
-	HAL_GPIO_WritePin(CE_GPIO_Port, CE_Pin, state);
+	HAL_GPIO_WritePin(cePort, cePin, state);
 }
 
 
 void nrf_init(SPI_HandleTypeDef bus_, bool isTX_) {
+
 	bus = bus_;
 	isTX = isTX_;
 	nrf_reset();

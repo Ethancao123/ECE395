@@ -19,11 +19,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include <math.h>
+#include <stdbool.h>
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 //#include "SimpleFOC.h"
 #include "drv8316.h"
 #include "magsensor.h"
+#include "nrf.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -72,8 +74,9 @@ static void MX_ADC2_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
-const float maxTorque = 25;
+const float maxTorque = 30;
 const int8_t invert = -1; //1 for normal, -1 for inverted
+#define TX
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -121,6 +124,13 @@ int main(void)
   uint8_t temp[12][3];
   Driver drv(&hspi2, GPIOC, SLEEP_N_Pin, GPIOC, SCS_N_Pin);
   drv.init();
+#ifdef TX
+  Nrf nrf(&hspi3, 1, GPIOC, NRF_CSN_Pin, GPIOC, NRF_CE_Pin);
+#endif
+#ifndef TX
+  Nrf nrf(&hspi3, 0, GPIOC, NRF_CSN_Pin, GPIOC, NRF_CE_Pin);
+#endif
+
 
   HAL_TIM_PWM_Start_IT (&htim1, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start_IT (&htim1, TIM_CHANNEL_2);
@@ -130,29 +140,47 @@ int main(void)
   HAL_TIMEx_PWMN_Start_IT(&htim1, TIM_CHANNEL_3);
 
   initMotor();
+  uint8_t status;
+  uint8_t payload;
   /* USER CODE END 2 */
-  confloat kp = -0.3;
+  const float kp = -0.3;
   float target = 0;
-  const float deadband = 1;
+  const float deadband = 0.5;
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  float ang = enc.getAngle();
-	  if(ang > 180)
-		  ang -= 360;
-	  float error = (ang-target);
-	  if(abs(error) < deadband)
-		  error = 0;
-	  float output = error*kp;
-	  outputTorque(output);
+#ifdef TX
+	float ang = enc.getAngle();
+		if(ang > 180)
+	   		ang -= 360;
+	payload = ang + 360; //(360-180) <-> (360+180) range, 360 is center
+	nrf.reset();
+	status = nrf.tx(&payload);
+	float error = (ang-target);
+	if(abs(error) < deadband)
+		error = 0;
+	float output = error*kp;
+	outputTorque(output);
+#endif
+#ifndef TX
+	status = nrf.rx(&payload);
+	int8_t targetSpeed = payload - 360;
+	if(targetSpeed > 45)
+		targetSpeed = 45;
+	if(targetSpeed < -45)
+		targetSpeed = -45;
+	outputTorque(targetSpeed/2);
+#endif
   }
   /* USER CODE END 3 */
 }
 void initMotor() {
-	vectorAngle(0, 20);
+	vectorAngle(0, 30);
 	HAL_Delay(1000);
 	enc.zero();
+	HAL_Delay(1000);
 	vectorAngle(0, 0);
 }
 

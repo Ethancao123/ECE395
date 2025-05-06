@@ -1,0 +1,175 @@
+/*
+ * nrf.cpp
+ *
+ *  Created on: May 1, 2025
+ *      Author: ethancao
+ */
+
+#include "nrf.h"
+
+Nrf::Nrf(SPI_HandleTypeDef*  bus_, bool isTX_, GPIO_TypeDef *_csnPort,
+		uint16_t _csnPin, GPIO_TypeDef *_cePort, uint16_t _cePin) {
+	csnPort = _csnPort;
+	csnPin = _csnPin;
+	cePort = _cePort;
+	cePin = _cePin;
+	bus = bus_;
+	isTX = isTX_;
+	reset();
+
+}
+
+uint8_t Nrf::reset() {
+	setCS(1);
+	setCE(0);
+	// Reset registers
+	// Reset registers
+	write_register(NRF24L01P_REG_CONFIG, 0x08);
+//	write_register(NRF24L01P_REG_EN_AA, 0x3F);
+	write_register(NRF24L01P_REG_EN_AA, 0x00);
+	write_register(NRF24L01P_REG_EN_RXADDR, 0x03);
+	write_register(NRF24L01P_REG_SETUP_AW, 0x03);
+	write_register(NRF24L01P_REG_SETUP_RETR, 0x2F);
+	write_register(NRF24L01P_REG_RF_CH, 0x02);
+	write_register(NRF24L01P_REG_RF_SETUP, 0x07);
+	write_register(NRF24L01P_REG_STATUS, 0x7E);
+	write_register(NRF24L01P_REG_RX_PW_P0, 0x20);
+	write_register(NRF24L01P_REG_RX_PW_P1, 0x00);
+	write_register(NRF24L01P_REG_RX_PW_P2, 0x00);
+	write_register(NRF24L01P_REG_RX_PW_P3, 0x00);
+	write_register(NRF24L01P_REG_RX_PW_P4, 0x00);
+	write_register(NRF24L01P_REG_RX_PW_P5, 0x00);
+	write_register(NRF24L01P_REG_FIFO_STATUS, 0x11);
+//	write_register(NRF24L01P_REG_DYNPD, 0x3F);
+	write_register(NRF24L01P_REG_DYNPD, 0x01);
+	write_register(NRF24L01P_REG_FEATURE, 0x06);
+
+	//set FIFO depth to 1
+
+	//set ptx, prx mode
+	if(isTX){
+		write_register(NRF24L01P_REG_TX_ADDR, WIRELESS_ADDR);
+		uint8_t new_config = read_register(NRF24L01P_REG_CONFIG);
+		new_config &= 0xFE;
+		write_register(NRF24L01P_REG_CONFIG, new_config);
+	} else {
+		write_register(NRF24L01P_REG_RX_ADDR_P0, WIRELESS_ADDR);
+		uint8_t new_config = read_register(NRF24L01P_REG_CONFIG);
+		new_config |= 1 << 0;
+		write_register(NRF24L01P_REG_CONFIG, new_config);
+	}
+
+	//power up
+	uint8_t new_config = read_register(NRF24L01P_REG_CONFIG);
+	new_config |= 1 << 1;
+	write_register(NRF24L01P_REG_CONFIG, new_config);
+
+	//set RX pipe width
+	write_register(NRF24L01P_REG_RX_PW_P0, PAYLOAD_LEN);
+	//set RF channel
+	write_register(NRF24L01P_REG_RF_CH, 15);
+	//set data rate
+//	uint8_t new_rf_setup = read_register(NRF24L01P_REG_RF_SETUP) & 0xD7;
+//	write_register(NRF24L01P_REG_RF_SETUP, new_rf_setup);
+	//set tx power
+//	new_rf_setup = read_register(NRF24L01P_REG_RF_SETUP) & 0xF9;
+//	new_rf_setup |= (0x3 << 1);
+//	write_register(NRF24L01P_REG_RF_SETUP, new_rf_setup);
+	//set crc length
+	//default should work
+	//set address width
+	//default should work
+	//set auto retransmit count
+	//default should work
+	//set retransmit delay
+	//default should work
+	setCE(1);
+	return status();
+}
+
+uint8_t Nrf::status() {
+	uint8_t command = NRF24L01P_CMD_NOP;
+	uint8_t status;
+	setCS(0);
+	HAL_SPI_TransmitReceive(bus, &command, &status, 1, 2000);
+	setCS(1);
+	return status;
+}
+
+uint8_t Nrf::tx(uint8_t* payload) {
+	uint8_t command;
+	uint8_t status;
+	//clear TX FIFO
+	command = NRF24L01P_CMD_FLUSH_TX;
+	setCS(0);
+	HAL_SPI_TransmitReceive(bus, &command, &status, 1, 2000);
+	setCS(1);
+	write_register(NRF24L01P_REG_STATUS, 0b00010000);
+	if(isTX){
+		//clear max_rt
+		//W_TX_PAYLOAD command
+		command = NRF24L01P_CMD_W_TX_PAYLOAD;
+	} else {
+		//W_ACK_PAYLOAD command
+		command = NRF24L01P_CMD_W_ACK_PAYLOAD;
+	}
+	setCS(0);
+	HAL_SPI_TransmitReceive(bus, &command, &status, 1, 2000);
+	HAL_SPI_Transmit(bus, payload, PAYLOAD_LEN, 2000);
+	setCS(1);
+	return status;
+}
+
+uint8_t Nrf::rx(uint8_t* payload){
+	//check RX FIFO
+	uint8_t status = read_register(NRF24L01P_REG_STATUS);
+	if((status & 0b00001110) == 0b00001110)
+		return status;
+	uint8_t command = NRF24L01P_CMD_R_RX_PAYLOAD;
+	setCS(0);
+	HAL_SPI_TransmitReceive(bus, &command, &status, 1, 100);
+	HAL_SPI_Receive(bus, payload, PAYLOAD_LEN, 100);
+	setCS(1);
+	return status;
+
+}
+
+uint8_t Nrf::read_register(uint8_t reg) {
+	uint8_t command = NRF24L01P_CMD_R_REGISTER | reg;
+	uint8_t status;
+	uint8_t read_val;
+
+	setCS(0);
+	HAL_SPI_TransmitReceive(bus, &command, &status, 1, 2000);
+	HAL_SPI_Receive(bus, &read_val, 1, 2000);
+    setCS(1);
+
+	return read_val;
+}
+
+uint8_t Nrf::write_register(uint8_t reg, uint8_t value) {
+	uint8_t command = NRF24L01P_CMD_W_REGISTER | reg;
+	uint8_t status;
+	uint8_t write_val = value;
+
+	setCS(0);
+	HAL_SPI_TransmitReceive(bus, &command, &status, 1, 2000);
+	HAL_SPI_Transmit(bus, &write_val, 1, 2000);
+	setCS(1);
+
+	return write_val;
+}
+
+void Nrf::setCS(bool state){
+	if(state)
+		HAL_GPIO_WritePin(csnPort, csnPin, GPIO_PIN_SET);
+	else
+		HAL_GPIO_WritePin(csnPort, csnPin, GPIO_PIN_RESET);
+}
+
+void Nrf::setCE(bool state){
+	if(state)
+		HAL_GPIO_WritePin(cePort, cePin, GPIO_PIN_SET);
+	else
+		HAL_GPIO_WritePin(cePort, cePin, GPIO_PIN_RESET);
+}

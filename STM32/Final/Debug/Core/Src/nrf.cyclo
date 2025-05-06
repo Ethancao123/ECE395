@@ -1,0 +1,9 @@
+../Core/Src/nrf.cpp:10:1:Nrf::Nrf(SPI_HandleTypeDef*, bool, GPIO_TypeDef*, uint16_t, GPIO_TypeDef*, uint16_t)	1
+../Core/Src/nrf.cpp:22:9:uint8_t Nrf::reset()	2
+../Core/Src/nrf.cpp:90:9:uint8_t Nrf::status()	1
+../Core/Src/nrf.cpp:99:9:uint8_t Nrf::tx(uint8_t*)	2
+../Core/Src/nrf.cpp:123:9:uint8_t Nrf::rx(uint8_t*)	2
+../Core/Src/nrf.cpp:137:9:uint8_t Nrf::read_register(uint8_t)	1
+../Core/Src/nrf.cpp:150:9:uint8_t Nrf::write_register(uint8_t, uint8_t)	1
+../Core/Src/nrf.cpp:163:6:void Nrf::setCS(bool)	2
+../Core/Src/nrf.cpp:170:6:void Nrf::setCE(bool)	2
