@@ -76,7 +76,7 @@ static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 const float maxTorque = 30;
 const int8_t invert = -1; //1 for normal, -1 for inverted
-#define TX
+//#define TX
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -155,8 +155,7 @@ int main(void)
 	float ang = enc.getAngle();
 		if(ang > 180)
 	   		ang -= 360;
-	payload = ang + 360; //(360-180) <-> (360+180) range, 360 is center
-	nrf.reset();
+	payload = ang/4 + 128; //(128-90) <-> (128+90) range, 128 is center
 	status = nrf.tx(&payload);
 	float error = (ang-target);
 	if(abs(error) < deadband)
@@ -166,12 +165,24 @@ int main(void)
 #endif
 #ifndef TX
 	status = nrf.rx(&payload);
-	int8_t targetSpeed = payload - 360;
+	int8_t targetSpeed = ((int8_t)payload) - 128;
 	if(targetSpeed > 45)
 		targetSpeed = 45;
 	if(targetSpeed < -45)
 		targetSpeed = -45;
+	if(targetSpeed > 0 && targetSpeed < 20)
+		targetSpeed = 20;
+	if(targetSpeed < 0 && targetSpeed > -20)
+			targetSpeed = -20;
 	outputTorque(targetSpeed/2);
+//	float ang = enc.getAngle();
+//		if(ang > 180)
+//		   	ang -= 360;
+//	float error = (ang-targetSpeed);
+//	if(abs(error) < deadband)
+//		error = 0;
+//	float output = error*kp;
+//	outputTorque(output);
 #endif
   }
   /* USER CODE END 3 */
@@ -494,17 +505,17 @@ static void MX_SPI3_Init(void)
   hspi3.Instance = SPI3;
   hspi3.Init.Mode = SPI_MODE_MASTER;
   hspi3.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi3.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi3.Init.NSS = SPI_NSS_SOFT;
-  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
   hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
   hspi3.Init.CRCPolynomial = 7;
   hspi3.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
-  hspi3.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
+  hspi3.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
   if (HAL_SPI_Init(&hspi3) != HAL_OK)
   {
     Error_Handler();
