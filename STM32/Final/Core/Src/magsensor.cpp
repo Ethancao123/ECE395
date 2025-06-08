@@ -7,7 +7,6 @@
 #include "stm32g4xx_hal.h"
 #include "magsensor.h"
 
-
 Encoder::Encoder(I2C_HandleTypeDef* _i2c) {
 	i2c = _i2c;
 	buf[0] = 0x30;
